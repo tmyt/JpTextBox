@@ -18,7 +18,7 @@ using System.Windows.Data;
 
 namespace Japanese
 {
-    public partial class JpTextBox : UserControl, INotifyPropertyChanged
+    public partial class JpTextBox : UserControl//, INotifyPropertyChanged
     {
         // 依存プロパティ
         public static readonly DependencyProperty IsImeEnabledProperty
@@ -92,8 +92,18 @@ namespace Japanese
         }
         public int CompositionDelay { get { return 150; } }
 
-        public event RoutedEventHandler SelectionChanged;
-        public event TextChangedEventHandler TextChanged;
+        //public event RoutedEventHandler SelectionChanged;
+        //public event TextChangedEventHandler TextChanged;
+        public event RoutedEventHandler SelectionChanged
+        {
+        	add { textBox.SelectionChanged += value; }
+        	remove { textBox.SelectionChanged -= value; }
+        }
+        public event TextChangedEventHandler TextChanged
+        {
+        	add { textBox.TextChanged += value; }
+        	remove { textBox.TextChanged -= value; }
+        }
         public event EventHandler StartComposition;
         public event EventHandler EndComposition;
 
@@ -145,6 +155,7 @@ namespace Japanese
             this.DataContext = this;
 
             // TextBoxへのバインディングを設定
+            /*
             textBox.SetBinding(TextBox.AcceptsReturnProperty, new Binding("AcceptsReturn") { Source = this, Mode = BindingMode.TwoWay });
             textBox.SetBinding(TextBox.CaretBrushProperty, new Binding("CaretBrush") { Source = this, Mode = BindingMode.TwoWay });
             textBox.SetBinding(TextBox.InputScopeProperty, new Binding("InputScope") { Source = this, Mode = BindingMode.TwoWay });
@@ -155,6 +166,7 @@ namespace Japanese
             textBox.SetBinding(TextBox.TextAlignmentProperty, new Binding("TextAlignment") { Source = this, Mode = BindingMode.TwoWay });
             textBox.SetBinding(TextBox.TextProperty, new Binding("Text") { Source = this, Mode = BindingMode.TwoWay });
             textBox.SetBinding(TextBox.TextWrappingProperty, new Binding("TextWrapping") { Source = this, Mode = BindingMode.TwoWay });
+            */
 
             // TextBoxの初期値を設定
             AcceptsReturn = false;
@@ -242,13 +254,17 @@ namespace Japanese
             {
                 if (m_romajiToKanaTable.ContainsKey(m.Value))
                 {
+                    // 促音の入力？
+                    bool isSokuon = (m.Value.Count() == 2 && m.Value.ToLower().Distinct().Count() == 1);
+
                     // 当該範囲置換
                     compositionBox.Text = text_all.Substring(0, m.Index)
                         + m_romajiToKanaTable[m.Value]
+                        + (isSokuon ? m.Value[1].ToString() : "")
                         + text_all.Substring(text1.Length);
 
                     // キャレット位置設定
-                    compositionBox.SelectionStart = m.Index + m_romajiToKanaTable[m.Value].Length;
+                    compositionBox.SelectionStart = m.Index + m_romajiToKanaTable[m.Value].Length + (isSokuon ? 1 : 0);
 
                     // Socal IME へリクエスト
                     //RequestSocialIME();
@@ -409,13 +425,11 @@ namespace Japanese
             textBox.Focus();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private void Control_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             compositionList.MaxWidth = this.ActualWidth;
         }
-
+		/*
         private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (TextChanged != null)
@@ -434,5 +448,6 @@ namespace Japanese
                 PropertyChanged(this, new PropertyChangedEventArgs("SelectedText"));
             }
         }
+        */
     }
 }

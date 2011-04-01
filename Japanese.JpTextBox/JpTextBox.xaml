@@ -123,8 +123,10 @@
         <Grid Grid.Row="0">
             <!-- UserControls -->
             <TextBox Style="{StaticResource CompositiveTextBoxStyle}" x:Name="textBox"  KeyDown="textBox_KeyDown"
-                     TextChanged="textBox_TextChanged"
-                     SelectionChanged="textBox_SelectionChanged"
+                     AcceptsReturn="{Binding AcceptsReturn,Mode=TwoWay}" CaretBrush="{Binding CaretBrush,Mode=TwoWay}" InputScope="{Binding InputScope,Mode=TwoWay}"
+                     IsReadOnly="{Binding IsReadOnly,Mode=TwoWay}" MaxLength="{Binding MaxLength,Mode=TwoWay}" SelectionBackground="{Binding SelectionBackground,Mode=TwoWay}"
+                     SelectionForeground="{Binding SelectionForeground,Mode=TwoWay}" TextAlignment="{Binding TextAlignment,Mode=TwoWay}"
+                     Text="{Binding Text,Mode=TwoWay}" TextWrapping="{Binding TextWrapping,Mode=TwoWay}"
             />
             <TextBox Style="{StaticResource CompositiveTextBoxStyle}" x:Name="compositionBox" Visibility="Collapsed" TextChanged="compositionBox_TextChanged" KeyUp="compositionBox_KeyUp" Foreground="{StaticResource PhoneAccentBrush}" Background="{StaticResource PhoneContrastBackgroundBrush}" />
         </Grid>
