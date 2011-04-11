@@ -64,6 +64,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="JpTextBox.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
